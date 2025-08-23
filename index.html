@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>High Tension Transmission Lines Fault Detector</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow flex items-center justify-between px-6 py-4">
+    <span class="font-bold text-lg">Fault Detector</span>
+    <div class="flex gap-6">
+      <a href="#home" class="hover:text-blue-600">Home</a>
+      <a href="#introduction" class="hover:text-blue-600">Introduction</a>
+      <a href="#system" class="hover:text-blue-600">System Overview</a>
+      <a href="#working" class="hover:text-blue-600">Working</a>
+      <a href="#components" class="hover:text-blue-600">Components</a>
+      <a href="#advantages" class="hover:text-blue-600">Advantages</a>
+      <a href="#conclusion" class="hover:text-blue-600">Conclusion</a>
+    </div>
+  </nav>
+
+  <!-- Home -->
+  <section id="home" class="relative min-h-[60vh] flex flex-col justify-center items-center text-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80');">
+    <div class="bg-black bg-opacity-60 p-8 rounded-lg">
+      <h1 class="text-4xl md:text-5xl font-bold text-yellow-400 mb-4">High Tension Transmission Lines Fault Detector</h1>
+      <p class="text-xl md:text-2xl text-white mb-2">Smart real-time fault detection for safer power transmission</p>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section id="introduction" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
+    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Introduction</h2>
+    <p class="mb-2">Transmission lines are the backbone of electrical power distribution, carrying high voltage electricity over long distances. Faults such as wire breakage, fire hazards, and power outages can cause severe disruptions, safety risks, and economic losses.</p>
+    <p class="mb-2">Detecting faults quickly is crucial to prevent accidents and ensure reliable power supply. This project aims to detect faults in real time using sensors and alert mechanisms, improving safety and efficiency in power transmission.</p>
+  </section>
+
+  <!-- System Overview -->
+  <section id="system" class="py-12 px-4 md:px-16 bg-gray-100 dark:bg-gray-900">
+    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">System Overview</h2>
+    <p class="mb-6">Two endpoints are connected by three copper transmission lines. The system uses thermistor sensors, a dual channel relay, and a 240V AC supply with a regulator to monitor and indicate faults.</p>
+    <!-- Infographic -->
+    <div class="flex flex-col md:flex-row items-center gap-8">
+      <div class="flex gap-8">
+        <div class="flex flex-col items-center">
+          <img src="https://img.icons8.com/fluency/96/000000/electrical.png" alt="Copper Line" class="w-16 h-16 mb-2">
+          <span class="text-sm">Copper Lines</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <img src="https://img.icons8.com/color/96/000000/temperature.png" alt="Thermistor" class="w-16 h-16 mb-2">
+          <span class="text-sm">Thermistor Sensors</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <img src="https://img.icons8.com/color/96/000000/relay.png" alt="Relay" class="w-16 h-16 mb-2">
+          <span class="text-sm">Dual Channel Relay</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <img src="https://img.icons8.com/color/96/000000/light-on.png" alt="Bulb" class="w-16 h-16 mb-2">
+          <span class="text-sm">Fault Indicator Bulbs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Working Principle -->
+  <section id="working" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
+    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Working Principle</h2>
+    <div class="flex flex-col md:flex-row gap-8 items-center">
+      <div class="flex flex-col gap-6">
+        <div class="flex items-center gap-4">
+          <img src="https://img.icons8.com/ios-filled/50/00e676/light-off.png" alt="Normal" class="w-10 h-10">
+          <span class="font-semibold">Normal Condition</span>
+          <span class="text-gray-500">→ No bulbs lit</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <img src="https://img.icons8.com/color/48/ff9800/fire-element.png" alt="Fire Fault" class="w-10 h-10">
+          <span class="font-semibold">Fire Fault</span>
+          <span class="text-gray-500">→ Thermistor detects heat → Relay activates → Bulb lights up</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <img src="https://img.icons8.com/ios-filled/50/2196f3/cut.png" alt="Wire Break" class="w-10 h-10">
+          <span class="font-semibold">Wire Break</span>
+          <span class="text-gray-500">→ Relay detects loss → Bulb lights up</span>
+        </div>
+      </div>
+      <div class="hidden md:block">
+        <img src="https://img.icons8.com/fluency/192/000000/electrical.png" alt="System Diagram" class="w-48 h-48">
+      </div>
+    </div>
+  </section>
+
+  <!-- Components -->
+  <section id="components" class="py-12 px-4 md:px-16 bg-gray-100 dark:bg-gray-900">
+    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Components</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="flex items-center gap-4">
+        <img src="https://img.icons8.com/color/48/000000/temperature.png" alt="Thermistor" class="w-10 h-10">
+        <div>
+          <span class="font-semibold">Thermistor Sensor:</span>
+          <span>Detects heat due to overload or fire.</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <img src="https://img.icons8.com/color/48/000000/relay.png" alt="Relay" class="w-10 h-10">
+        <div>
+          <span class="font-semibold">Dual Channel Relay:</span>
+          <span>Activates bulbs for fault indication.</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <img src="https://img.icons8.com/color/48/000000/light-on.png" alt="Bulb" class="w-10 h-10">
+        <div>
+          <span class="font-semibold">Bulbs:</span>
+          <span>Indicate which line has a fault.</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <img src="https://img.icons8.com/color/48/000000/voltage.png" alt="Voltage Regulator" class="w-10 h-10">
+        <div>
+          <span class="font-semibold">Voltage Regulator & AC Supply:</span>
+          <span>Ensures safe operation at 240V AC.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advantages -->
+  <section id="advantages" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
+    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Advantages</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li>Real-time fault detection</li>
+      <li>Simple and cost-effective</li>
+      <li>Suitable for rural and industrial areas</li>
+      <li>Improves safety and reliability</li>
+      <li>Future expansion: wireless alerts or auto-shutdown</li>
+    </ul>
+  </section>
+
+  <!-- Conclusion -->
+  <section id="conclusion" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
+    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Conclusion</h2>
+    <p>This project demonstrates a practical and scalable solution for monitoring high tension transmission lines using simple electronics.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 dark:bg-gray-900 text-gray-100 py-6 text-center">
+    <div class="mb-2">Project by <span class="font-bold">Dinesh Gopal</span></div>
+    <div>Contact: <span class="underline">dineshgopal615@outlook.com</span></div>
+    <div class="mt-2 text-sm text-gray-400">© 2025 High Tension Transmission Lines Fault Detector</div>
+  </footer>
+</body>
+</html>
