@@ -1,153 +1,533 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>High Tension Transmission Lines Fault Detector</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f8fafc;
+      color: #22223b;
+      transition: background 0.3s, color 0.3s;
+    }
+    .navbar {
+      background: #2563eb;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-bottom: 2px solid #2563eb;
+      position: fixed;
+      top: 0; left: 0; width: 100%; z-index: 100;
+      padding: 0.5rem 0;
+      transition: padding 0.2s, box-shadow 0.2s;
+    }
+    .navbar.shrink {
+      padding: 0.2rem 0;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.18);
+    }
+    .nav-link {
+      color: #fff;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: background 0.2s;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      outline: none;
+    }
+    .nav-link:hover, .nav-link-active {
+      background: #1d4ed8;
+      color: #fff !important;
+    }
+    .nav-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .nav-scroll::-webkit-scrollbar { display: none; }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .hero {
+      background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+      color: #fff;
+      border-radius: 0 0 2rem 2rem;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+      margin-bottom: 2rem;
+      margin-top: 3.5rem;
+      padding: 2.5rem 1rem 2rem 1rem;
+      text-align: center;
+    }
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 12px #2563eb88;
+    }
+    .hero-desc {
+      color: #e0e7ff;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1.25rem;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.08);
+      padding: 2rem 1.5rem;
+      margin: 2.5rem 0;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .card.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .section-title {
+      color: #2563eb;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .section-subtitle {
+      color: #22223b;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .card ul, .card ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+    .footer-bg {
+      background: #2563eb;
+      color: #fff;
+      text-align: center;
+      padding: 1.2rem 0 0.7rem 0;
+      font-size: 1.1rem;
+      margin-top: 3rem;
+      border-radius: 1rem 1rem 0 0;
+      letter-spacing: 1px;
+    }
+    .accent {
+      color: #2563eb;
+      font-weight: bold;
+    }
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 120;
+      display: none;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.25rem;
+      border: none;
+      transition: background 0.2s;
+    }
+    #scrollTopBtn:hover {
+      background: #1d4ed8;
+    }
+    .toggle-btn {
+      position: absolute;
+      top: 0.7rem;
+      right: 1.5rem;
+      background: #fff;
+      color: #2563eb;
+      border-radius: 999px;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 0.35rem 0.9rem;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      z-index: 101;
+    }
+    .toggle-btn:hover {
+      background: #2563eb;
+      color: #fff;
+    }
+    body.dark {
+      background: #18181b;
+      color: #e0e7ff;
+    }
+    body.dark .navbar, body.dark .footer-bg {
+      background: #1e293b;
+      color: #e0e7ff;
+      border-bottom: 2px solid #60a5fa;
+    }
+    body.dark .card {
+      background: #232946;
+      color: #e0e7ff;
+      box-shadow: 0 2px 12px rgba(96,165,250,0.08);
+    }
+    body.dark .section-title, body.dark .accent {
+      color: #60a5fa;
+    }
+    body.dark #scrollTopBtn {
+      background: #60a5fa;
+      color: #232946;
+    }
+    body.dark .toggle-btn {
+      background: #232946;
+      color: #60a5fa;
+    }
+    body.dark .toggle-btn:hover {
+      background: #60a5fa;
+      color: #232946;
+    }
+    @media (max-width: 600px) {
+      .card { padding: 1.2rem 0.7rem; }
+      .section-title { font-size: 1.3rem; }
+      .navbar { font-size: 0.95rem; }
+      .hero { font-size: 1rem; padding: 1.5rem 0.5rem 1.2rem 0.5rem; }
+      .hero-title { font-size: 1.5rem; }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+<body>
   <!-- Navbar -->
-  <nav class="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow flex items-center justify-between px-6 py-4">
-    <span class="font-bold text-lg">Fault Detector</span>
-    <div class="flex gap-6">
-      <a href="#home" class="hover:text-blue-600">Home</a>
-      <a href="#introduction" class="hover:text-blue-600">Introduction</a>
-      <a href="#system" class="hover:text-blue-600">System Overview</a>
-      <a href="#working" class="hover:text-blue-600">Working</a>
-      <a href="#components" class="hover:text-blue-600">Components</a>
-      <a href="#advantages" class="hover:text-blue-600">Advantages</a>
-      <a href="#conclusion" class="hover:text-blue-600">Conclusion</a>
+  <nav id="navbar" class="navbar flex items-center justify-center nav-scroll">
+    <button id="themeToggle" class="toggle-btn" title="Toggle light/dark mode">🌙</button>
+    <div class="flex gap-2 flex-wrap justify-center">
+      <a href="#introduction" class="nav-link">Introduction</a>
+      <a href="#system-overview" class="nav-link">System Overview</a>
+      <a href="#thermistor-functions" class="nav-link">Thermistor Sensor Functions</a>
+      <a href="#relay-operation" class="nav-link">Relay Operation</a>
+      <a href="#working-principle" class="nav-link">Working Principle</a>
+      <a href="#problem-statement" class="nav-link">Problem Statement</a>
+      <a href="#limitations" class="nav-link">Limitations</a>
+      <a href="#future-scope" class="nav-link">Future Scope</a>
+      <a href="#applications" class="nav-link">Applications</a>
+      <a href="#power-supply" class="nav-link">Power Supply</a>
+      <a href="#relay-clarification" class="nav-link">Relay Clarification</a>
+      <a href="#advantages" class="nav-link">Advantages & Conclusion</a>
+      <a href="#safety" class="nav-link">Safety Precautions</a>
+      <a href="#references" class="nav-link">References</a>
     </div>
   </nav>
 
-  <!-- Home -->
-  <section id="home" class="relative min-h-[60vh] flex flex-col justify-center items-center text-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80');">
-    <div class="bg-black bg-opacity-60 p-8 rounded-lg">
-      <h1 class="text-4xl md:text-5xl font-bold text-yellow-400 mb-4">High Tension Transmission Lines Fault Detector</h1>
-      <p class="text-xl md:text-2xl text-white mb-2">Smart real-time fault detection for safer power transmission</p>
-    </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-title">High Tension Transmission Lines Fault Detector</div>
+    <div class="hero-desc">School Project &mdash; Real-time Fault Detection for Safer Power Transmission</div>
   </section>
 
-  <!-- Introduction -->
-  <section id="introduction" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
-    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Introduction</h2>
-    <p class="mb-2">Transmission lines are the backbone of electrical power distribution, carrying high voltage electricity over long distances. Faults such as wire breakage, fire hazards, and power outages can cause severe disruptions, safety risks, and economic losses.</p>
-    <p class="mb-2">Detecting faults quickly is crucial to prevent accidents and ensure reliable power supply. This project aims to detect faults in real time using sensors and alert mechanisms, improving safety and efficiency in power transmission.</p>
-  </section>
+  <div class="container">
+    <!-- INTRODUCTION -->
+    <section id="introduction" class="card">
+      <div class="section-title">INTRODUCTION</div>
+      <ul>
+        <li>High tension transmission lines are critical for carrying electricity over long distances.</li>
+        <li>Faults such as wire breakage or fire hazards can cause power outages and safety risks.</li>
+        <li>This project aims to detect faults in real time using sensors and alert mechanisms.</li>
+      </ul>
+    </section>
 
-  <!-- System Overview -->
-  <section id="system" class="py-12 px-4 md:px-16 bg-gray-100 dark:bg-gray-900">
-    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">System Overview</h2>
-    <p class="mb-6">Two endpoints are connected by three copper transmission lines. The system uses thermistor sensors, a dual channel relay, and a 240V AC supply with a regulator to monitor and indicate faults.</p>
-    <!-- Infographic -->
-    <div class="flex flex-col md:flex-row items-center gap-8">
-      <div class="flex gap-8">
-        <div class="flex flex-col items-center">
-          <img src="https://img.icons8.com/fluency/96/000000/electrical.png" alt="Copper Line" class="w-16 h-16 mb-2">
-          <span class="text-sm">Copper Lines</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <img src="https://img.icons8.com/color/96/000000/temperature.png" alt="Thermistor" class="w-16 h-16 mb-2">
-          <span class="text-sm">Thermistor Sensors</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <img src="https://img.icons8.com/color/96/000000/relay.png" alt="Relay" class="w-16 h-16 mb-2">
-          <span class="text-sm">Dual Channel Relay</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <img src="https://img.icons8.com/color/96/000000/light-on.png" alt="Bulb" class="w-16 h-16 mb-2">
-          <span class="text-sm">Fault Indicator Bulbs</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- SYSTEM OVERVIEW -->
+    <section id="system-overview" class="card">
+      <div class="section-title">SYSTEM OVERVIEW</div>
+      <ul>
+        <li>Two endpoints are connected by three copper transmission lines.</li>
+        <li>Each line is monitored by a thermistor sensor.</li>
+        <li>A dual channel relay controls the output indicators (bulbs).</li>
+        <li>The system is powered by a 240V AC supply, stepped down using a voltage regulator.</li>
+      </ul>
+    </section>
 
-  <!-- Working Principle -->
-  <section id="working" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
-    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Working Principle</h2>
-    <div class="flex flex-col md:flex-row gap-8 items-center">
-      <div class="flex flex-col gap-6">
-        <div class="flex items-center gap-4">
-          <img src="https://img.icons8.com/ios-filled/50/00e676/light-off.png" alt="Normal" class="w-10 h-10">
-          <span class="font-semibold">Normal Condition</span>
-          <span class="text-gray-500">→ No bulbs lit</span>
-        </div>
-        <div class="flex items-center gap-4">
-          <img src="https://img.icons8.com/color/48/ff9800/fire-element.png" alt="Fire Fault" class="w-10 h-10">
-          <span class="font-semibold">Fire Fault</span>
-          <span class="text-gray-500">→ Thermistor detects heat → Relay activates → Bulb lights up</span>
-        </div>
-        <div class="flex items-center gap-4">
-          <img src="https://img.icons8.com/ios-filled/50/2196f3/cut.png" alt="Wire Break" class="w-10 h-10">
-          <span class="font-semibold">Wire Break</span>
-          <span class="text-gray-500">→ Relay detects loss → Bulb lights up</span>
-        </div>
-      </div>
-      <div class="hidden md:block">
-        <img src="https://img.icons8.com/fluency/192/000000/electrical.png" alt="System Diagram" class="w-48 h-48">
-      </div>
-    </div>
-  </section>
+    <!-- THERMISTOR SENSOR FUNCTIONS -->
+    <section id="thermistor-functions" class="card">
+      <div class="section-title">THERMISTOR SENSOR FUNCTIONS</div>
+      <ul>
+        <li>A thermistor is a temperature-sensitive resistor.</li>
+        <li>It detects abnormal heat caused by fire or overload.</li>
+        <li>When a fault occurs, the thermistor changes resistance, triggering the relay.</li>
+      </ul>
+    </section>
 
-  <!-- Components -->
-  <section id="components" class="py-12 px-4 md:px-16 bg-gray-100 dark:bg-gray-900">
-    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Components</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="flex items-center gap-4">
-        <img src="https://img.icons8.com/color/48/000000/temperature.png" alt="Thermistor" class="w-10 h-10">
-        <div>
-          <span class="font-semibold">Thermistor Sensor:</span>
-          <span>Detects heat due to overload or fire.</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <img src="https://img.icons8.com/color/48/000000/relay.png" alt="Relay" class="w-10 h-10">
-        <div>
-          <span class="font-semibold">Dual Channel Relay:</span>
-          <span>Activates bulbs for fault indication.</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <img src="https://img.icons8.com/color/48/000000/light-on.png" alt="Bulb" class="w-10 h-10">
-        <div>
-          <span class="font-semibold">Bulbs:</span>
-          <span>Indicate which line has a fault.</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-4">
-        <img src="https://img.icons8.com/color/48/000000/voltage.png" alt="Voltage Regulator" class="w-10 h-10">
-        <div>
-          <span class="font-semibold">Voltage Regulator & AC Supply:</span>
-          <span>Ensures safe operation at 240V AC.</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- RELAY OPERATION AND FAULT INDICATION -->
+    <section id="relay-operation" class="card">
+      <div class="section-title">RELAY OPERATION AND FAULT INDICATION</div>
+      <ul>
+        <li>The dual channel relay receives input from the thermistor sensors.</li>
+        <li>If any transmission line is:
+          <ul>
+            <li>Overheated (due to fire)</li>
+            <li>Cut or disconnected</li>
+          </ul>
+        </li>
+        <li>The relay activates the corresponding bulb to indicate the fault.</li>
+        <li>Each transmission line is linked to a dedicated bulb.</li>
+        <li>When a fault is detected:
+          <ul>
+            <li>The bulb turns ON to show which line is affected.</li>
+          </ul>
+        </li>
+        <li>This allows for quick identification and response.</li>
+      </ul>
+    </section>
 
-  <!-- Advantages -->
-  <section id="advantages" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
-    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Advantages</h2>
-    <ul class="list-disc pl-6 space-y-2">
-      <li>Real-time fault detection</li>
-      <li>Simple and cost-effective</li>
-      <li>Suitable for rural and industrial areas</li>
-      <li>Improves safety and reliability</li>
-      <li>Future expansion: wireless alerts or auto-shutdown</li>
-    </ul>
-  </section>
+    <!-- WORKING PRINCIPLE SUMMARY -->
+    <section id="working-principle" class="card">
+      <div class="section-title">WORKING PRINCIPLE SUMMARY</div>
+      <ol>
+        <li>Normal Condition: All lines intact, no bulbs lit.</li>
+        <li>Fire Fault: Thermistor detects heat → Relay activates → Bulb lights up.</li>
+        <li>Wire Break: Line disconnected → Relay detects loss → Bulb lights up.</li>
+      </ol>
+      <ul>
+        <li>Insert the exact diagram you finalized earlier.</li>
+        <li>Label key components: 240V AC input, Voltage regulator, Thermistor sensors, Dual channel relay, Bulbs</li>
+      </ul>
+    </section>
 
-  <!-- Conclusion -->
-  <section id="conclusion" class="py-12 px-4 md:px-16 bg-white dark:bg-gray-800">
-    <h2 class="text-3xl font-bold mb-4 text-blue-700 dark:text-yellow-400">Conclusion</h2>
-    <p>This project demonstrates a practical and scalable solution for monitoring high tension transmission lines using simple electronics.</p>
-  </section>
+    <!-- PROBLEM STATEMENT -->
+    <section id="problem-statement" class="card">
+      <div class="section-title">PROBLEM STATEMENT</div>
+      <p>
+        High tension transmission lines are prone to fire hazards, insulation failures, and breakages. These faults can cause power blackouts and accidents. Traditional fault detection methods are slow. Hence, an automated fault detection system is required.
+      </p>
+    </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 dark:bg-gray-900 text-gray-100 py-6 text-center">
-    <div class="mb-2">Project by <span class="font-bold">Dinesh Gopal</span></div>
-    <div>Contact: <span class="underline">dineshgopal615@outlook.com</span></div>
-    <div class="mt-2 text-sm text-gray-400">© 2025 High Tension Transmission Lines Fault Detector</div>
+    <!-- LIMITATIONS -->
+    <section id="limitations" class="card">
+      <div class="section-title">LIMITATIONS</div>
+      <ul>
+        <li>Thermistors detect only heat, not all faults.</li>
+        <li>Relay-based system is manual, not automated.</li>
+        <li>Only local indication (bulbs) is available, no remote alerts.</li>
+      </ul>
+    </section>
+
+    <!-- FUTURE SCOPE -->
+    <section id="future-scope" class="card">
+      <div class="section-title">FUTURE SCOPE</div>
+      <ul>
+        <li>Use of GSM/IoT to send SMS/online alerts.</li>
+        <li>Use of current sensors to detect wire breakage more accurately.</li>
+        <li>Automatic shutdown system to cut faulty line and prevent damage.</li>
+      </ul>
+    </section>
+
+    <!-- APPLICATIONS -->
+    <section id="applications" class="card">
+      <div class="section-title">APPLICATIONS</div>
+      <ul>
+        <li>Rural electricity distribution.</li>
+        <li>Industrial plants (safety monitoring).</li>
+        <li>Smart grids and power stations.</li>
+        <li>Fire hazard monitoring in transmission poles.</li>
+        <li>Railway power transmission lines</li>
+        <li>Large residential colonies</li>
+        <li>Remote village electrification projects</li>
+      </ul>
+    </section>
+
+    <!-- DETAILED POWER SUPPLY SECTION -->
+    <section id="power-supply" class="card">
+      <div class="section-title">DETAILED POWER SUPPLY SECTION</div>
+      <p>
+        The project is powered from a 240V AC mains supply. This AC voltage is first stepped down using a step-down transformer (230V to 12V). The AC output is then converted to DC using a rectifier, filtered by a capacitor, and regulated to 5V/12V DC using a voltage regulator (such as 7805/7812). This regulated DC powers the thermistor sensors, relay module, and indicator bulbs.
+      </p>
+    </section>
+
+    <!-- RELAY CLARIFICATION -->
+    <section id="relay-clarification" class="card">
+      <div class="section-title">RELAY CLARIFICATION</div>
+      <div class="section-subtitle">Relay Requirement:</div>
+      <ul>
+        <li>Since the project monitors three transmission lines, each line requires a separate switching mechanism to activate its fault indicator.</li>
+        <li>A 3-channel relay module can be used, where each relay corresponds to one transmission line and its bulb.</li>
+        <li>Alternatively, a combination of one dual channel relay + one single channel relay can also be used to achieve the same function.</li>
+        <li>This ensures that all three lines are independently monitored and faults are clearly indicated without overlap.</li>
+      </ul>
+    </section>
+
+    <!-- ADVANTAGES AND CONCLUSION -->
+    <section id="advantages" class="card">
+      <div class="section-title">ADVANTAGES AND CONCLUSION</div>
+      <ul>
+        <li>Real-time fault detection</li>
+        <li>Simple and cost-effective</li>
+        <li>Easy to implement in rural or industrial areas</li>
+        <li>Enhances safety and reliability of power transmission</li>
+        <li>This project demonstrates a practical solution for monitoring high tension lines.</li>
+        <li>It uses basic components to build a smart fault detection system.</li>
+        <li>Can be expanded with wireless alerts or automated shutdowns in future versions</li>
+      </ul>
+    </section>
+
+    <!-- SAFETY PRECAUTIONS -->
+    <section id="safety" class="card">
+      <div class="section-title">SAFETY PRECAUTIONS</div>
+      <p>Since the project deals with 240V AC and high-tension concepts, safety must be emphasized:</p>
+      <ol>
+        <li>
+          <b>Electrical Isolation</b>
+          <ul>
+            <li>Use a step-down transformer to isolate your low-voltage circuit (5V/12V DC) from the dangerous 240V AC mains.</li>
+            <li>This prevents shock hazards.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Fuse Protection</b>
+          <ul>
+            <li>Place a fuse on the AC line input to protect against short circuits or overcurrent.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Component Insulation</b>
+          <ul>
+            <li>Wires connected to the thermistor (on the transmission lines) should be well insulated to avoid leakage or sparking.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Relay Safety</b>
+          <ul>
+            <li>Relays must be rated for the correct voltage/current.</li>
+            <li>Keep high-voltage side (bulbs) separated from the low-voltage control side.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Fire Hazard Prevention</b>
+          <ul>
+            <li>Since thermistors detect heat/fire, the project must be tested with safe, low-power heating (like a soldering iron nearby), not with real high-tension lines.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Safe Demonstration</b>
+          <ul>
+            <li>For school projects, demonstrate the principle using small bulbs (12V DC) instead of directly working with 240V AC.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <!-- REFERENCES -->
+    <section id="references" class="card">
+      <div class="section-title">REFERENCES</div>
+      <ol>
+        <li>
+          <b>Books</b>
+          <ul>
+            <li>B.R. Gupta, Power System Analysis and Design</li>
+            <li>J.B. Gupta, Electrical Power Systems</li>
+          </ul>
+        </li>
+        <li>
+          <b>Datasheets</b>
+          <ul>
+            <li>Thermistor Datasheet (NTC/PTC type used)</li>
+            <li>Relay Module Datasheet (3-channel relay)</li>
+            <li>Voltage Regulator IC (e.g., 7805/7812)</li>
+          </ul>
+        </li>
+        <li>
+          <b>Research Papers / Articles</b>
+          <ul>
+            <li>IEEE Paper: Transmission Line Fault Detection and Localization Techniques</li>
+            <li>Electronics Tutorials: Relay Working Principle and Applications</li>
+            <li>Electrical4U.com: Thermistor Working and Applications</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+  </div>
+
+  <button id="scrollTopBtn" title="Go to top">↑</button>
+
+  <footer class="footer-bg">
+    School Project – High Tension Transmission Lines Fault Detector – 2025
   </footer>
+
+  <script>
+    // Fade-in effect for cards
+    function revealSections() {
+      const cards = document.querySelectorAll('.card');
+      const windowHeight = window.innerHeight;
+      cards.forEach(card => {
+        const cardTop = card.getBoundingClientRect().top;
+        if (cardTop < windowHeight - 60) {
+          card.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealSections);
+    window.addEventListener('load', revealSections);
+
+    // Navbar shrink on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 30) {
+        navbar.classList.add('shrink');
+      } else {
+        navbar.classList.remove('shrink');
+      }
+    });
+
+    // Smooth scroll for navbar links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Highlight active section in navbar
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sectionIds = [
+      "#introduction","#system-overview","#thermistor-functions","#relay-operation",
+      "#working-principle","#problem-statement","#limitations","#future-scope",
+      "#applications","#power-supply","#relay-clarification","#advantages","#safety","#references"
+    ];
+    const sections = sectionIds.map(id => document.querySelector(id));
+    window.addEventListener('scroll', () => {
+      let index = sections.length - 1;
+      while (index >= 0 && window.scrollY + 120 < sections[index].offsetTop) {
+        index--;
+      }
+      navLinks.forEach(link => link.classList.remove('nav-link-active'));
+      if (index >= 0) navLinks[index].classList.add('nav-link-active');
+    });
+
+    // Scroll-to-top button
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 350) {
+        scrollBtn.style.display = 'block';
+      } else {
+        scrollBtn.style.display = 'none';
+      }
+    });
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Light/Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+  </script>
 </body>
 </html>
